@@ -177,7 +177,13 @@ export default function Dashboard() {
           <div className="lg:col-span-1">
             <Card className="p-6">
               <h3 className="font-semibold text-foreground mb-4">Apply Leave</h3>
-              <RadioGroup value={selectedLeaveType} onValueChange={setSelectedLeaveType}>
+              <RadioGroup 
+                value={selectedLeaveType} 
+                onValueChange={(value) => {
+                  setSelectedLeaveType(value);
+                  handleOpenModal(value);
+                }}
+              >
                 <div className="flex items-center space-x-2 mb-3">
                   <RadioGroupItem value="Annual" id="annual" />
                   <Label htmlFor="annual" className="cursor-pointer">Annual Leave</Label>
