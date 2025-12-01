@@ -7,8 +7,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { LogOut } from "lucide-react";
 import { toast } from "sonner";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, LineChart, Line } from "recharts";
 import { PieChart, Pie, Cell, Legend } from "recharts";
+import { Badge } from "@/components/ui/badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import ApplyLeaveModal from "@/components/ApplyLeaveModal";
 
 export default function Dashboard() {
@@ -66,6 +68,54 @@ export default function Dashboard() {
     { name: "Sick Leave", value: 27, color: "#10B981" },
     { name: "Personal Leave", value: 15, color: "#F59E0B" },
     { name: "Maternity/Paternity", value: 8, color: "#EF4444" },
+  ];
+
+  const monthlyTrendData = [
+    { month: "Jan", value: 46 },
+    { month: "Feb", value: 39 },
+    { month: "Mar", value: 52 },
+    { month: "Apr", value: 61 },
+    { month: "May", value: 49 },
+    { month: "Jun", value: 55 },
+  ];
+
+  const recentRequests = [
+    {
+      employee: "Emily Rodriguez",
+      leaveType: "Annual",
+      startDate: "2025-11-29",
+      endDate: "2025-11-30",
+      days: 2,
+      status: "Pending",
+      applied: "29/11/2025, 02:10:37",
+    },
+    {
+      employee: "—",
+      leaveType: "Annual",
+      startDate: "2025-11-28",
+      endDate: "2025-11-29",
+      days: 2,
+      status: "Pending",
+      applied: "28/11/2025, 12:47:24",
+    },
+    {
+      employee: "Sarah Johnson",
+      leaveType: "Personal",
+      startDate: "2025-11-27",
+      endDate: "2025-11-29",
+      days: 3,
+      status: "Pending",
+      applied: "28/11/2025, 12:25:19",
+    },
+    {
+      employee: "Emily Rodriguez",
+      leaveType: "Annual",
+      startDate: "2025-11-28",
+      endDate: "2025-11-30",
+      days: 3,
+      status: "Pending",
+      applied: "28/11/2025, 12:24:00",
+    },
   ];
 
   if (loading) {
@@ -196,6 +246,78 @@ export default function Dashboard() {
               </ResponsiveContainer>
             </Card>
           </div>
+        </div>
+
+        {/* Monthly Trends & Recent Requests - Full Width */}
+        <div className="space-y-6">
+          {/* Line Chart - Monthly Leave Trends */}
+          <Card className="p-6">
+            <h3 className="font-semibold text-foreground mb-6">Monthly Leave Trends</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={monthlyTrendData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                <XAxis 
+                  dataKey="month" 
+                  tick={{ fill: '#6B7280', fontSize: 12 }}
+                  axisLine={{ stroke: '#E5E7EB' }}
+                />
+                <YAxis 
+                  tick={{ fill: '#6B7280', fontSize: 12 }}
+                  axisLine={{ stroke: '#E5E7EB' }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke="#10B981" 
+                  strokeWidth={2}
+                  dot={{ fill: '#10B981', r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </Card>
+
+          {/* Recent Leave Requests Table */}
+          <Card className="p-6">
+            <div className="mb-6">
+              <h3 className="font-semibold text-foreground">Recent Leave Requests</h3>
+              <p className="text-sm text-muted-foreground">
+                Complete overview of all leave requests and their status
+              </p>
+            </div>
+            
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Employee</TableHead>
+                    <TableHead>Leave Type</TableHead>
+                    <TableHead>Start Date</TableHead>
+                    <TableHead>End Date</TableHead>
+                    <TableHead>Days</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Applied</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {recentRequests.map((request, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">{request.employee}</TableCell>
+                      <TableCell className="text-muted-foreground">{request.leaveType}</TableCell>
+                      <TableCell className="text-muted-foreground">{request.startDate}</TableCell>
+                      <TableCell className="text-muted-foreground">{request.endDate}</TableCell>
+                      <TableCell className="text-muted-foreground">{request.days}</TableCell>
+                      <TableCell>
+                        <Badge variant="secondary" className="bg-amber-100 text-amber-700 hover:bg-amber-100">
+                          {request.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">{request.applied}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </Card>
         </div>
       </div>
 
